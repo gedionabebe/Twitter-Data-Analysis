@@ -11,7 +11,7 @@ from extract_dataframe import TweetDfExtractor
 # we will need about 5 tweet samples. 
 # Create a sample not more than 10 tweets and place it in a json file.
 # Provide the path to the samples tweets file you created below
-sampletweetsjsonfile = ""   #put here the path to where you placed the file e.g. ./sampletweets.json. 
+sampletweetsjsonfile = "global_twitter_data.json"    
 _, tweet_list = read_json(sampletweetsjsonfile)
 
 columns = [
@@ -49,49 +49,51 @@ class TestTweetDfExtractor(unittest.TestCase):
 
     def setUp(self) -> pd.DataFrame:
         self.df = TweetDfExtractor(tweet_list[:5])
-        # tweet_df = self.df.get_tweet_df()
+        self.tweet_df = self.df.get_tweet_df()
 
     def test_find_statuses_count(self):
         self.assertEqual(
-            self.df.find_statuses_count(), <provide a list of the first five status counts>
+            self.df.find_statuses_count(), list(self.tweet_df.head()['statuses_count'])
         )
 
     def test_find_full_text(self):
-        text = <provide a list of the first five full texts>
+        text = self.tweet_df.head()['original_text']
 
-        self.assertEqual(self.df.find_full_text(), text)
+        self.assertEqual(self.df.find_full_text(), list(text))
+        
 
     def test_find_sentiments(self):
         self.assertEqual(
             self.df.find_sentiments(self.df.find_full_text()),
             (
-                <provide a list of the first five sentiment values>,
-                <provide a list of the first five polarity values>,
+                list(self.tweet_df.head()['polarity']),
+                list(self.tweet_df.head()['subjectivity']),
+                
             ),
         )
 
 
     def test_find_screen_name(self):
-        name = <provide a list of the first five screen names>
-        self.assertEqual(self.df.find_screen_name(), name)
+        name = self.tweet_df.head()['original_author']
+        self.assertEqual(self.df.find_screen_name(), list(name))
 
     def test_find_followers_count(self):
-        f_count = <provide a list of the first five follower counts>
-        self.assertEqual(self.df.find_followers_count(), f_count)
+        f_count = self.tweet_df.head()['followers_count']
+        self.assertEqual(self.df.find_followers_count(), list(f_count))
 
     def test_find_friends_count(self):
-        friends_count = <provide a list of the first five friend's counts>
-        self.assertEqual(self.df.find_friends_count(), friends_count)
+        friends_count = self.tweet_df.head()['friends_count']
+        self.assertEqual(self.df.find_friends_count(), list(friends_count))
 
     def test_find_is_sensitive(self):
-        self.assertEqual(self.df.is_sensitive(), <provide a list of the first five is_sensitive values>)
+        self.assertEqual(self.df.is_sensitive(), list(self.tweet_df.head()['possibly_sensitive']))
 
 
-    # def test_find_hashtags(self):
-    #     self.assertEqual(self.df.find_hashtags(), )
+    def test_find_hashtags(self):
+         self.assertEqual(self.df.find_hashtags(), list(self.tweet_df.head()['hashtags']))
 
-    # def test_find_mentions(self):
-    #     self.assertEqual(self.df.find_mentions(), )
+    def test_find_mentions(self):
+         self.assertEqual(self.df.find_mentions(), list(self.tweet_df.head()['user_mentions']))
 
 
 
