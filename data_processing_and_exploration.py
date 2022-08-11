@@ -45,7 +45,7 @@ class DataPreprocessor:
     
     def feature_preparation(self):
         features = self.tweeter_data.iloc[:,2].values
-        lables = self.tweeter_data[:,5].values
+        lables = self.tweeter_data.iloc[:,5].values
         processed_features = []
 
         for sentence in range(0,len(features)):
@@ -56,7 +56,7 @@ class DataPreprocessor:
             processed_feature = re.sub(r'^b\s+', '', processed_feature)
             processed_feature = processed_feature.lower()
             processed_features.append(processed_feature)
-
+            
         return lables, processed_features
             
 
@@ -80,5 +80,6 @@ if __name__ == "__main__":
     #print(test.preprocess_data())
     #print(test.explore_data())
     #print(test.visualize_data())
+    #print(test.feature_preparation())
 
 
