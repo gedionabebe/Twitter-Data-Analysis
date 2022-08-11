@@ -4,6 +4,7 @@ import string
 from gensim import corpora
 from wordcloud import STOPWORDS,WordCloud
 import matplotlib.pyplot as plt
+import re
 
 from clean_tweets_dataframe import Clean_Tweets
 
@@ -41,6 +42,23 @@ class DataPreprocessor:
 
 
         return word_to_id, corpus
+    
+    def feature_preparation(self):
+        features = self.tweeter_data.iloc[:,2].values
+        lables = self.tweeter_data[:,5].values
+        processed_features = []
+
+        for sentence in range(0,len(features)):
+            processed_feature = re.sub(r'\W', ' ', str(features[sentence]))
+            processed_feature= re.sub(r'\s+[a-zA-Z]\s+', ' ', processed_feature)
+            processed_feature = re.sub(r'\^[a-zA-Z]\s+', ' ', processed_feature)
+            processed_feature = re.sub(r'\s+', ' ', processed_feature, flags=re.I)
+            processed_feature = re.sub(r'^b\s+', '', processed_feature)
+            processed_feature = processed_feature.lower()
+            processed_features.append(processed_feature)
+
+        return lables, processed_features
+            
 
     def explore_data(self):
         first_ten_values = self.tweeter_data.head()
