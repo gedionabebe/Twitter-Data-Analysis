@@ -68,7 +68,7 @@ class TestTweetDfExtractor(unittest.TestCase):
             (
                 list(self.tweet_df.head()['polarity']),
                 list(self.tweet_df.head()['subjectivity']),
-                
+                list(self.tweet_df.head()['sentiment']),
             ),
         )
 
